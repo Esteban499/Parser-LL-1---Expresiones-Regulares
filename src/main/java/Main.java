@@ -5,7 +5,7 @@ public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
 
-        System.out.println("Introduce una expresion regular valida:");
+        System.out.print("Introduce una expresion regular valida: ");
         String valor = sc.nextLine();
 
             System.out.println("Probando: " + valor);

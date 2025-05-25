@@ -1,6 +1,15 @@
+// Programa en Java para analizar expresiones regulares usando una gramática LL(1)
+// que requiere el uso explícito del operador de concatenación '.' y evita usos inválidos como "a**".
+
 import java.util.*;
 
-// Enumera los tipos de tokens que el analizador léxico puede reconocer
+// Tipos de tokens permitidos
 enum TokenType {
-    LPAREN, RPAREN, UNION, STAR, DOT, CHAR, EOF
+    CHAR,       // Caracteres alfanuméricos y símbolos especiales
+    UNION,      // |
+    STAR,       // *
+    DOT,        // . (operador de concatenación obligatorio)
+    LPAREN,     // (
+    RPAREN,     // )
+    EOF         // Fin de entrada
 }
