@@ -11,11 +11,13 @@ class Parser {
     // Avanza al siguiente token si coincide con el esperado
     private void eat(TokenType expected) {
         if (currentToken.type == expected) {
-            currentToken = lexer.nextToken();
+            currentToken = lexer.nextToken(); //Invoca el método nextToken para analizar la proxima posicion de la cadena
         } else {
             throw new RuntimeException("Error de sintaxis: se esperaba " + expected + " pero se encontró " + currentToken.type);
         }
     }
+
+    // Acá se ubican el paso a paso del parseo a la expresión algebraica.
 
     // S → E EOF
     public void parse() {
