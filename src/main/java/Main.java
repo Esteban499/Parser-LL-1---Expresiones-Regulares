@@ -13,10 +13,25 @@ public class Main {
             Parser parser = new Parser(lexer);
             TreeNode tree = parser.parse();
             System.out.println("Válido");
-            try{
-                GraphvizTreeBuilder.generateImage(tree, "C:\\Users\\florf\\OneDrive\\Documentos\\ll1\\Parser-LL-1---Expresiones-Regulares/arbol.png"); // nuevo
+
+            // Paso 1: construir lista de terminales reales
+            List<String> terminales = new ArrayList<>();
+            for (char c : valor.toCharArray()) {
+                if (!Character.isWhitespace(c)) {
+                    terminales.add(String.valueOf(c));
+                }
             }
-            catch(Exception e){}
+
+            try {
+                GraphvizTreeBuilder.generateImage(
+                        tree,
+                        "C:\\Users\\florf\\OneDrive\\Documentos\\ll1\\Parser-LL-1---Expresiones-Regulares/arbol.png",
+                        terminales
+                );
+            } catch (Exception e) {
+                System.err.println("Error generando imagen: " + e.getMessage());
+            }
+
         } catch (RuntimeException e) {
             System.out.println("Inválido: " + e.getMessage());
         }
