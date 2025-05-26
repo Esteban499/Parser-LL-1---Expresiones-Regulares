@@ -1,4 +1,4 @@
-// Representa un token con su tipo y valor textual
+// Representa un token escaneado por el lexer
 class Token {
     TokenType type;
     String value;
@@ -7,4 +7,6 @@ class Token {
         this.type = type;
         this.value = value;
     }
+
+
 }

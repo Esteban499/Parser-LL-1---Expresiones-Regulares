@@ -1,4 +1,4 @@
-// Analizador sintáctico recursivo basado en una gramática LL(1)
+// Analizador sintáctico: analiza tokens según la gramática LL(1)
 class Parser {
     private final Lexer lexer;
     private Token currentToken;
@@ -8,83 +8,81 @@ class Parser {
         this.currentToken = lexer.nextToken();
     }
 
-    private void eat(TokenType type) {
-        if (currentToken.type == type) {
+    // Avanza al siguiente token si coincide con el esperado
+    private void eat(TokenType expected) {
+        if (currentToken.type == expected) {
             currentToken = lexer.nextToken();
         } else {
-            throw new RuntimeException("Error de sintaxis: se esperaba " + type + " pero se encontró ");
+            throw new RuntimeException("Error de sintaxis: se esperaba " + expected + " pero se encontró " + currentToken.type);
         }
     }
 
     // S → E EOF
     public void parse() {
-        E();
+        parseE();
         if (currentToken.type != TokenType.EOF) {
-            throw new RuntimeException("Error: entrada inesperada después de la expresión válida: '" + currentToken.value+"'");
+            throw new RuntimeException("Error de sintaxis: entrada no consumida al final");
         }
     }
 
     // E → T E'
-    private void E() {
-        T();
-        EPrime();
+    private void parseE() {
+        parseT();
+        parseEPrime();
     }
 
     // E' → | T E' | ε
-    private void EPrime() {
+    private void parseEPrime() {
         if (currentToken.type == TokenType.UNION) {
             eat(TokenType.UNION);
-            T();
-            EPrime();
+            parseT();
+            parseEPrime();
         }
     }
 
     // T → F T'
-    private void T() {
-        F();
-        TPrime();
+    private void parseT() {
+        parseF();
+        parseTPrime();
     }
 
     // T' → . F T' | ε
-    private void TPrime() {
+    private void parseTPrime() {
         if (currentToken.type == TokenType.DOT) {
             eat(TokenType.DOT);
-            F();
-            TPrime();
+            parseF();
+            parseTPrime();
         }
     }
 
     // F → P F'
-    private void F() {
-        P();
-        FPrime();
+    private void parseF() {
+        parseP();
+        parseFPrime();
     }
 
     // F' → * F' | ε
-    private void FPrime() {
+    private void parseFPrime() {
         if (currentToken.type == TokenType.STAR) {
             eat(TokenType.STAR);
-            FPrime();
+            // Verificamos que no haya otro * seguido inmediatamente
+            if (currentToken.type == TokenType.STAR) {
+                throw new RuntimeException("Error de sintaxis: uso inválido de operador * duplicado");
+            }
+            parseFPrime();
         }
     }
 
-    // P → (E) | L
-    private void P() {
+    // P → ( E ) | CHAR
+    private void parseP() {
         if (currentToken.type == TokenType.LPAREN) {
             eat(TokenType.LPAREN);
-            E();
+            parseE();
             eat(TokenType.RPAREN);
-        } else {
-            L();
-        }
-    }
-
-    // L → CHAR
-    private void L() {
-        if (currentToken.type == TokenType.CHAR) {
+        } else if (currentToken.type == TokenType.CHAR) {
             eat(TokenType.CHAR);
         } else {
-            throw new RuntimeException("Error: se esperaba un literal válido (letra, número o símbolo especial)");
+            throw new RuntimeException("Error de sintaxis: se esperaba '(' o un carácter");
         }
     }
 }
