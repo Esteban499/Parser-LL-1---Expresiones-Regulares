@@ -8,7 +8,5 @@ class Token {
         this.value = value;
     }
 
-    public String toString() {
-        return String.format("Token(%s, '%s')", type, value);
-    }
+
 }

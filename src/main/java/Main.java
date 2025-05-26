@@ -13,9 +13,9 @@ public class Main {
                 Lexer lexer = new Lexer(valor);
                 Parser parser = new Parser(lexer);
                 parser.parse();
-                System.out.println("✓ Válido");
+                System.out.println("Válido");
             } catch (RuntimeException e) {
-                System.out.println("✗ Inválido: " + e.getMessage());
+                System.out.println("Inválido: " + e.getMessage());
             }
     }
 }
