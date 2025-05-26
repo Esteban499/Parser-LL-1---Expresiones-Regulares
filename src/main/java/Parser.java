@@ -1,4 +1,3 @@
-// Analizador sintáctico: analiza tokens según la gramática LL(1)
 class Parser {
     private final Lexer lexer;
     private Token currentToken;
@@ -8,7 +7,6 @@ class Parser {
         this.currentToken = lexer.nextToken();
     }
 
-    // Avanza al siguiente token si coincide con el esperado
     private void eat(TokenType expected) {
         if (currentToken.type == expected) {
             currentToken = lexer.nextToken();
@@ -17,72 +15,84 @@ class Parser {
         }
     }
 
-    // S → E EOF
-    public void parse() {
-        parseE();
+    public TreeNode parse() {
+        TreeNode root = parseE();
         if (currentToken.type != TokenType.EOF) {
-            throw new RuntimeException("Error de sintaxis: entrada no consumida al final");
+            throw new RuntimeException("Error de sintaxis: entrada no consumida");
         }
+        return root;
     }
 
-    // E → T E'
-    private void parseE() {
-        parseT();
-        parseEPrime();
+    private TreeNode parseE() {
+        TreeNode node = new TreeNode("E");
+        node.addChild(parseT());
+        node.addChild(parseEPrime());
+        return node;
     }
 
-    // E' → | T E' | ε
-    private void parseEPrime() {
+    private TreeNode parseEPrime() {
+        TreeNode node = new TreeNode("E'");
         if (currentToken.type == TokenType.UNION) {
+            node.addChild(new TreeNode("|"));
             eat(TokenType.UNION);
-            parseT();
-            parseEPrime();
+            node.addChild(parseT());
+            node.addChild(parseEPrime());
         }
+        return node;
     }
 
-    // T → F T'
-    private void parseT() {
-        parseF();
-        parseTPrime();
+    private TreeNode parseT() {
+        TreeNode node = new TreeNode("T");
+        node.addChild(parseF());
+        node.addChild(parseTPrime());
+        return node;
     }
 
-    // T' → . F T' | ε
-    private void parseTPrime() {
+    private TreeNode parseTPrime() {
+        TreeNode node = new TreeNode("T'");
         if (currentToken.type == TokenType.DOT) {
+            node.addChild(new TreeNode("."));
             eat(TokenType.DOT);
-            parseF();
-            parseTPrime();
+            node.addChild(parseF());
+            node.addChild(parseTPrime());
         }
+        return node;
     }
 
-    // F → P F'
-    private void parseF() {
-        parseP();
-        parseFPrime();
+    private TreeNode parseF() {
+        TreeNode node = new TreeNode("F");
+        node.addChild(parseP());
+        node.addChild(parseFPrime());
+        return node;
     }
 
-    // F' → * F' | ε
-    private void parseFPrime() {
+    private TreeNode parseFPrime() {
+        TreeNode node = new TreeNode("F'");
         if (currentToken.type == TokenType.STAR) {
+            node.addChild(new TreeNode("*"));
             eat(TokenType.STAR);
-            // Verificamos que no haya otro * seguido inmediatamente
             if (currentToken.type == TokenType.STAR) {
-                throw new RuntimeException("Error de sintaxis: uso inválido de operador * duplicado");
+                throw new RuntimeException("Error: operador * duplicado");
             }
-            parseFPrime();
+            node.addChild(parseFPrime());
         }
+        return node;
     }
 
-    // P → ( E ) | CHAR
-    private void parseP() {
+    private TreeNode parseP() {
+        TreeNode node = new TreeNode("P");
         if (currentToken.type == TokenType.LPAREN) {
+            node.addChild(new TreeNode("("));
             eat(TokenType.LPAREN);
-            parseE();
+            node.addChild(parseE());
+            node.addChild(new TreeNode(")"));
             eat(TokenType.RPAREN);
         } else if (currentToken.type == TokenType.CHAR) {
+            node.addChild(new TreeNode(currentToken.value));
             eat(TokenType.CHAR);
         } else {
-            throw new RuntimeException("Error de sintaxis: se esperaba '(' o un carácter");
+            throw new RuntimeException("Error: se esperaba '(' o CHAR");
         }
+        return node;
     }
 }
