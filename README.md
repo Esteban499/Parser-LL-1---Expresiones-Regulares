@@ -12,7 +12,7 @@
 | T'            | → ε                    | { &#124; , `#`, `)` }                      |
 | F             | → PF'                  | { `(`, `a`, `b`, `c` }                     |
 | F'            | → `*`                  | { `*` }                                    |
-| F'            | → ε                    | { `.`, `&#124;` , `#`, `)` }               |
+| F'            | → ε                    | { `.`, &#124; , `#`, `)` }                 |
 | P             | → (E)                  | { `(` }                                    |
 | P             | → L                    | { `a`, `b`, `c` }                          |
 | P             | → L                    | { `a` }                                    |
@@ -69,8 +69,9 @@ Toma la secuencia de tokens del lexer y los analiza conforme a una **gramática 
 - **Comentarios extensivos:** Explican cada parte del código para facilitar su comprensión y mantenimiento.
 - **Recursión:** Se usa en todas las reglas de la gramática LL(1) para reflejar su naturaleza jerárquica.
 
-Realizado por: 
-  - @Esteban499
-  - @SantiMolina9
-  - @flordelcastillo
-  - @JoelRodriguez174
+Realizado por:
+   - [@Esteban499](https://github.com/Esteban499)
+   - [@SantiMolina9](https://github.com/SantiMolina9) 
+   - [@flordelcastillo](https://github.com/flordelcastillo)
+   - [@JoelRodriguez174](https://github.com/JoelRodriguez174)
+
