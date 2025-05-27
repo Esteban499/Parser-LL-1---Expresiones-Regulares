@@ -62,7 +62,7 @@ Convierte una cadena de entrada (una expresión regular) en una secuencia de tok
 
 Toma la secuencia de tokens del lexer y los analiza conforme a una **gramática LL(1)** para verificar si la expresión es válida y seguir su estructura recursivamente.
 
-## 💡 4. **Principios de Diseño Usados**
+💡 **Principios de Diseño Usados**
 
 - **Orientación a objetos:** Clases `Token`, `Lexer`, `Parser`.
 - **Modularidad:** Cada componente (lexer, parser) está bien separado.
